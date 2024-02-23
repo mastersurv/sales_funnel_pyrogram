@@ -36,6 +36,18 @@ async def get_users(async_session, User):
 		return users
 
 
+# Функция для проверки существования пользователя в базе данных
+async def user_exists(async_session, id, User):
+	async with async_session() as session:
+		stmt = select(User)
+		result = await session.execute(stmt)
+		users = result.scalars().all()
+		for user in users:
+			if user.id == id:
+				return True
+		return False
+
+
 async def add_user(async_session, user_data, User):
 	# Создаем новый объект пользователя на основе переданных данных
 	new_user = User(**user_data)

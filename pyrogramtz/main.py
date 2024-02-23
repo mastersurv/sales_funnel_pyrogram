@@ -1,11 +1,11 @@
-from pyrogram import Client
+from pyrogram import Client, types
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from db import engine, metadata
 from models import User
 import asyncio
 from pyrogram.methods.utilities.idle import idle
-from db import DATABASE_URL, get_users, add_user
+from db import DATABASE_URL, get_users, add_user, user_exists
 import datetime
 
 api_id =
@@ -17,16 +17,19 @@ async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession
 
 
 @app.on_message()
-async def handle_message(client, message):
+async def handle_message(client, message: types.Message):
 	# Данные нового пользователя
-	new_user_data = {
-		"created_at": datetime.datetime(2024, 2, 23, 12, 0, 0),
+	user_data = {
+		"id": message.from_user.id,
+		"created_at": datetime.datetime.utcnow(),
 		"status": "active",
-		"status_updated_at": datetime.datetime(2024, 2, 23, 12, 0, 0)
+		"status_updated_at": datetime.datetime.utcnow()
 	}
-	if "добавить" in message.text:
-		await message.reply("Вы добавлены в базу данных")
-		await add_user(async_session, new_user_data, User)
+	# Проверка существования пользователя в базе данных
+	if await user_exists(async_session, user_data['id'], User):
+		print("Пользователь уже существует в базе данных")
+	else:
+		await add_user(async_session, user_data, User)
 
 	# Код обработки сообщения
 	if "прекрасно" in message.text or "ожидать" in message.text:
