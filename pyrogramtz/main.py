@@ -11,8 +11,8 @@ from datetime import timedelta
 from pyrogram.errors import FloodWait, UserBlocked, UserDeactivated
 
 
-api_id = 27690174
-api_hash = "f90b8c2a7fae9ea03131dedb302d3019"
+api_id =
+api_hash =
 app = Client('my_account', api_id=api_id, api_hash=api_hash)
 
 engine = create_async_engine(DATABASE_URL)
