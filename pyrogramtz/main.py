@@ -11,8 +11,8 @@ from datetime import timedelta
 from pyrogram.errors import FloodWait, UserBlocked, UserDeactivated
 
 
-api_id =
-api_hash =
+api_id = 27690174
+api_hash = "f90b8c2a7fae9ea03131dedb302d3019"
 app = Client('my_account', api_id=api_id, api_hash=api_hash)
 
 engine = create_async_engine(DATABASE_URL)
@@ -50,11 +50,11 @@ async def handle_message(client, message: types.Message):
 
 		try:
 			if user.message1_sent_at is None:
-				next_message_time = user.created_at + datetime.timedelta(seconds=10)
+				next_message_time = user.created_at + datetime.timedelta(minutes=6)
 			elif user.message2_sent_at is None:
-				next_message_time = user.message1_sent_at + datetime.timedelta(seconds=39)
+				next_message_time = user.message1_sent_at + datetime.timedelta(minutes=39)
 			elif user.message3_sent_at is None:
-				next_message_time = user.message2_sent_at + datetime.timedelta(minutes=1, seconds=2)
+				next_message_time = user.message2_sent_at + datetime.timedelta(day=1, hours=2)
 			else:
 				# Все сообщения уже отправлены
 				break
